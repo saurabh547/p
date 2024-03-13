@@ -1,0 +1,149 @@
+Handling dates and other custom types can require extra effort. Let’s start with a 
+small comma-separated (CSV) text file:
+
+code:-
+with open('examples/ex1.csv', 'r') as file:
+    for line in file:
+        print(line.strip())
+
+a,b,c,d,message 
+1,2,3,4,hello 
+5,6,7,8,world 
+9,10,11,12,foo 
+
+Here used is the Unix cat shell command to print the raw contents 
+of the file to the screen. If you’re on Windows, you can use type 
+instead of cat to achieve the same effect. 
+
+In [9]: df = pd.read_csv('examples/ex1.csv') 
+In [10]: df 
+
+We could also have used read_table and specified the delimiter: 
+In [11]: pd.read_table('examples/ex1.csv', sep=',') 
+
+A file will not always have a header row. Consider this file:
+
+with open('examples/ex1.csv', 'r') as file:
+    for line in file:
+        print(line.strip())
+1,2,3,4,hello 
+5,6,7,8,world 
+9,10,11,12,foo 
+
+To read this file, you have a couple of options. You can allow pandas to assign default 
+column names, or you can specify names yourself: 
+
+In [13]: pd.read_csv('examples/ex2.csv', header=None)
+
+In [14]: pd.read_csv('examples/ex2.csv', names=['a', 'b', 'c', 'd', 'message']) 
+
+Suppose you wanted the message column to be the index of the returned DataFrame. 
+You can either indicate you want the column at index 4 or named 'message' using 
+the index_col argument: 
+
+In [15]: names = ['a', 'b', 'c', 'd', 'message'] 
+In [16]: pd.read_csv('examples/ex2.csv', names=names, index_col='message')
+
+In the event that you want to form a hierarchical index from multiple columns, pass a 
+list of column numbers or names: 
+
+with open('examples/csv_mindex.csv', 'r') as file:
+    for line in file:
+        print(line.strip())
+
+key1,key2,value1,value2 
+one,a,1,2 
+one,b,3,4 
+one,c,5,6 
+one,d,7,8 
+two,a,9,10 
+two,b,11,12 
+two,c,13,14 
+two,d,15,16
+
+In [18]: parsed = pd.read_csv('examples/csv_mindex.csv', 
+....: index_col=['key1', 'key2']) 
+In [19]: parsed 
+
+Handling missing values is an important and frequently nuanced part of the file pars-
+ing process. Missing data is usually either not present (empty string) or marked by 
+some sentinel value. By default, pandas uses a set of commonly occurring sentinels, 
+such as NA and NULL: 
+
+with open('examples/ex5.csv', 'r') as file:
+    for line in file:
+        print(line.strip())
+something,a,b,c,d,message 
+one,1,2,3,4,NA 
+two,5,6,,8,world 
+three,9,10,11,12,foo 
+
+In [26]: result = pd.read_csv('examples/ex5.csv') 
+In [27]: result 
+
+In [28]: pd.isnull(result) 
+
+
+JSON Data 
+JSON (short for JavaScript Object Notation) has become one of the standard formats 
+for sending data by HTTP request between web browsers and other applications. It is 
+a much more free-form data format than a tabular text form like CSV. example: 
+
+obj = """ 
+{"name": "Wes", 
+"places_lived": ["United States", "Spain", "Germany"], 
+"pet": null, 
+"siblings": [{"name": "Scott", "age": 30, "pets": ["Zeus", "Zuko"]}, 
+{"name": "Katie", "age": 38, 
+"pets": ["Sixes", "Stache", "Cisco"]}] 
+} 
+""" 
+
+JSON is very nearly valid Python code with the exception of its null value null and 
+some other nuances (such as disallowing trailing commas at the end of lists). The 
+basic types are objects (dicts), arrays (lists), strings, numbers, booleans, and nulls. All 
+of the keys in an object must be strings. There are several Python libraries for reading 
+and writing JSON data. I’ll use json here, as it is built into the Python standard 
+library. To convert a JSON string to Python form, use json.loads:
+
+In [62]: import json 
+In [63]: result = json.loads(obj) 
+In [64]: result 
+
+json.dumps, on the other hand, converts a Python object back to JSON: 
+In [65]: asjson = json.dumps(result) 
+
+In [69]: data = pd.read_json('examples/example.json') 
+In [70]: data 
+
+If you need to export data from pandas to JSON, one way is to use the to_json methods on Series and 
+DataFrame: 
+In [71]: print(data.to_json()) 
+
+HTML
+In [73]: tables = pd.read_html('examples/fdic_failed_bank_list.html') 
+In [74]: len(tables) 
+Out[74]: 1 
+In [75]: failures = tables[0] 
+In [76]: failures.head() 
+Out[76]: 
+Bank Name City ST CERT \ 
+0 Allied Bank Mulberry AR 91 
+1 The Woodbury Banking Company Woodbury GA 11297 
+2 First CornerStone Bank King of Prussia PA 35312 
+
+XML 
+XML data can get much more complicated than this example. Each tag can have 
+metadata, too. Consider an HTML link tag, which is also valid XML: 
+
+from lxml import objectify 
+from io import StringIO 
+tag = '<a href="http://www.google.com">Google</a>' 
+root = objectify.parse(StringIO(tag)).getroot() 
+
+You can now access any of the fields (like href) in the tag or the link text: 
+In [84]: root
+
+In [85]: root.get('href') 
+
+In [86]: root.text 
