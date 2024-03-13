@@ -2,9 +2,9 @@ Pandas DataFrame is two-dimensional size-mutable, potentially heterogeneous tabu
 with labeled axes (rows and columns). A Data frame is a two-dimensional data structure, i.e., data is 
 aligned in a tabular fashion in rows and columns. Pandas DataFrame consists of three principal 
 components, the data, rows, and columns. 
- 
+step 1:- download csv file https://github.com/laxmimerit/All-CSV-ML-Data-Files-Download/blob/master/nba.csv
 Creating a Pandas DataFrame 
- DataFrame can be created using a single list or a list of lists. 
+DataFrame can be created using a single list or a list of lists. 
  
 Code: 
 #Creating a dataframe using List:  
