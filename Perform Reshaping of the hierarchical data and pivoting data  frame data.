@@ -1,0 +1,58 @@
+Reshaping with Hierarchical Indexing 
+Hierarchical indexing provides a consistent way to rearrange data in a DataFrame. 
+There are two primary actions: 
+stack 
+This “rotates” or pivots from the columns in the data to the rows 
+unstack 
+This pivots from the rows into the columns
+code:-
+In [120]: data = pd.DataFrame(np.arange(6).reshape((2, 3)), 
+.....: index=pd.Index(['Ohio', 'Colorado'], name='state'), 
+.....: columns=pd.Index(['one', 'two', 'three'], 
+.....: name='number')) 
+In [121]: data 
+
+Using the stack method on this data pivots the columns into the rows, producing a 
+Series: 
+In [122]: result = data.stack() 
+In [123]: result 
+
+From a hierarchically indexed Series, you can rearrange the data back into a Data-Frame with unstack: 
+In [124]: result.unstack() 
+
+By default the innermost level is unstacked (same with stack). You can unstack a different level by passing a level number or name: 
+In [125]: result.unstack(0) 
+In [126]: result.unstack('state') 
+
+
+Pivoting  
+An inverse operation to pivot for DataFrames is pandas.melt. Rather than trans- 
+forming one column into many in a new DataFrame, it merges multiple columns into 
+one, producing a DataFrame that is longer than the input. Let’s look at an example: 
+
+In [157]: df = pd.DataFrame({'key': ['foo', 'bar', 'baz'], 
+.....: 'A': [1, 2, 3], 
+.....: 'B': [4, 5, 6], 
+.....: 'C': [7, 8, 9]}) 
+In [158]: df 
+
+The 'key' column may be a group indicator, and the other columns are data values. 
+When using pandas.melt, we must indicate which columns (if any) are group indica- 
+tors. Let’s use 'key' as the only group indicator here: 
+
+In [159]: melted = pd.melt(df, ['key']) 
+In [160]: melted 
+
+Using pivot, we can reshape back to the original layout: 
+In [161]: reshaped = melted.pivot('key', 'variable', 'value') 
+In [162]: reshaped 
+
+Since the result of pivot creates an index from the column used as the row labels, we 
+may want to use reset_index to move the data back into a column: 
+In [163]: reshaped.reset_index()
+
+You can also specify a subset of columns to use as value columns: 
+In [164]: pd.melt(df, id_vars=['key'], value_vars=['A', 'B']) 
+
+pandas.melt can be used without any group identifiers, too: 
+In [165]: pd.melt(df, value_vars=['A', 'B', 'C']) 
