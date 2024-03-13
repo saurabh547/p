@@ -1,0 +1,138 @@
+Pandas Series is a one-dimensional labelled array capable of holding data of any type (integer, string, 
+float, python objects, etc.). The axis labels are collectively called index. Pandas Series is nothing but a 
+column in an excel sheet. 
+
+Code: 
+  
+import pandas as pd   
+# creating a series 
+data = pd.Series([5, 2, 3,7], index=['a', 'b', 'c', 'd'])               
+# creating a series 
+data1 = pd.Series([1, 6, 4, 9], index=['a', 'b', 'd', 'e']) 
+print(data, "\n\n", data1) 
+*********
+
+Operations on Series: 
+Code: 
+Binary Operation on Series 
+In order to perform binary operation on series we have to use some function like .add(),.sub(),.mult, etc. 
+
+# adding two series using 
+# .add 
+addition=data.add(data1, fill_value=0) 
+print("\nAddition: \n",addition)
+***************
+
+# subtracting two series using 
+# .sub 
+subtract=data.sub(data1, fill_value=0) 
+print("\nSubtraction: \n",subtract) 
+*************
+
+# multiplying two series using 
+# .mul 
+multiply=data.mul(data1, fill_value=0) 
+print("\nMultiplication: \n",multiply)
+****************
+
+# dividing two series using 
+# .div 
+division=data.div(data1, fill_value=0) 
+print("\nDivision: \n",division)
+***********
+
+print("\n sum data:",pd.Series(data).sum()) 
+***********
+print("\n prod data:",pd.Series(data).prod()) 
+***********
+print("\n mean data:",pd.Series(data).mean()) 
+************
+print("\n pow data raised to data1:\n",data.pow(data1)) 
+O/p:
+
+print("\n abs data:\n",subtract.abs()) 
+O/p
+
+Pandas series method: 
+combine_first(): Method is used to combine two series into one 
+# calling on data and data1 
+
+print(data) 
+print(data1) 
+result1 = data.combine_first(data1) 
+result2 = data1.combine_first(data) 
+print("\nCombine: data and data1\n",result1) 
+print("\nCombine: data1 and data\n",result2) 
+
+#series(): A pandas Series can be created with the Series() constructor method. This constructor method accepts a variety of inputs 
+print("data series:\n",data) 
+
+#count(): Returns number of non-NA/null observations in the Series 
+print("count:",data.count()) 
+
+#size(): Returns the number of elements in the underlying data 
+print("size:",data.size) 
+
+#name(): Method allows to give a name to a Series object, i.e. to the column 
+data.name="series1" 
+print("name:",data.name) 
+o/p
+
+#is_unique(): Method returns boolean if values in the object are unique 
+print("is unique:",data.is_unique) 
+
+#idxmax(): Method to extract the index positions of the highest values in a Series
+print("extract the index positions of the highest values in a Series: ",data.idxmax()) 
+
+#idxmin(): Method to extract the index positions of the lowest values in a Series 
+print("extract the index positions of the highest values in a Series: ",data.idxmin())
+
+#sort_values(): Method is called on a Series to sort the values in ascending or descending order 
+print("sort the values:\n",data.sort_values())
+
+#sort_index(): Method is called on a pandas Series to sort it by the index instead of its values 
+print("sort the index:\n",data.sort_index()) 
+
+#head(): Method is used to return a specified number of rows from the beginning of a Series. The method returns a brand new Series 
+print("head:",data.head()) 
+
+#tail(): Method is used to return a specified number of rows from the end of a Series. The method returns a brand new Series  
+print("tail:",data.tail()) 
+
+#le(): Used to compare every element of Caller series with passed series.It returns True for every element which is Less than or Equal to the element in passed series 
+print("data less than equal to data1:",data.le(data1)) 
+
+#ge(): Used to compare every element of Caller series with passed series. It returns True for every element which is Greater than or Equal to the element in passed series 
+print("data greater than equal to data1:",data.ge(data1)) 
+
+#It(): Used to compare two series and return Boolean value for every respective element 
+print("data less than data1:",data.lt(data1))
+
+#eq(): Used to compare every element of Caller series with passed series. It returns True for every element which is Equal to the element in passed series 
+print("data equal to data1:",data.eq(data1)) 
+
+#ne(): Used to compare every element of Caller series with passed series. It returns True for every element which is Not Equal to the element in passed series 
+print("data not equal to data1:",data.ne(data1)) 
+
+#clip(): Used to clip value below and above to passed Least and Max value 
+s = pd.Series([5,2,3,7,9]) 
+print("data:",data) 
+print("Clip:\n",data.clip(lower=2,upper=4)) 
+
+#clip_lower(): Used to clip values below a passed least value 
+#importing pandas library 
+import pandas as pd 
+series = pd.Series([8,3,-6,4,5.5]) 
+print("--Series--") 
+print(series) 
+print("--After clipping the Series--") 
+print(series.clip(lower=3)) 
+
+#clip_upper(): Used to clip values above a passed maximum value 
+#importing pandas library 
+import pandas as pd 
+series = pd.Series([8,3,-6,4,5.5]) 
+print("--Series--") 
+print(series) 
+print("--After clipping the Series--") 
+print(series.clip(upper=3)) 
